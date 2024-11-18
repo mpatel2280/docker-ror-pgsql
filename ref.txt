@@ -1,0 +1,51 @@
+
+# check already running porsts (web and db containers and change it as per availability)
+
+sudo rm tmp/pids/server.pid
+docker-compose down 
+docker network prune
+docker system prune
+
+docker network create ror_pgdb_1
+
+docker-compose up --build
+
+docker ps -a
+
+# connect with web container
+# based on container name
+docker exec -it ror_web1 bash
+
+OR 
+
+# based on container id
+docker exec -it 8128d65cf2b8 bash
+
+
+#connect with db container
+# based on container name
+docker exec -it ror_pgdb1 bash
+
+OR 
+
+# based on container id
+docker exec -it bbb249cd7b6c bash
+
+
+rails db:migrate
+
+
+# connect to PostgreSql
+psql -h ror_pgdb1  -U postgres
+
+# list all dbs 
+\l 
+
+# select db 
+\c ror_blog
+
+# show all tables 
+\dt 
+
+# select records
+select * from fruits;

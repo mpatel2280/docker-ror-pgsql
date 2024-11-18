@@ -1,0 +1,28 @@
+services:  
+  pgdb1:
+    image: patelm2280/docker-postgresql16
+    container_name: ror_pgdb1
+    restart: always
+    environment:
+        POSTGRES_DB: ror_blog
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_USER: postgres
+    ports:
+      - "5434:5432"
+    networks:
+      - ror_pgdb_1
+  web1:
+    build: .
+    container_name: ror_web1
+    command: bundle exec rails s -b '0.0.0.0'
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - pgdb1
+    networks:
+      - ror_pgdb_1
+networks:
+  ror_pgdb_1:
+    external: true
